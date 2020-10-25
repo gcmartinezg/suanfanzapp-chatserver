@@ -45,6 +45,7 @@ mysqlConnection.connect((err) => {
         console.log('La conexion a la DB fallo ' + JSON.stringify(err, undefined, 2));
     
 });
+
 // CRUD ejemplo
 /*
 // Get all employees
@@ -79,25 +80,39 @@ router.delete('/employees/:id', (request: Request, response: Response) => {
         else 
             console.log(err);
     });
-});
+});*/
 
-router.post('/employees', (request: Request, response: Response) => {
-    let name = request.body.name;
-    let empId = request.body.empId;
-    let salary = request.body.salary;
-    let query = `insert into employee(Name, EmpCode, Salary)
-                    values ('${name}', '${empId}', ${salary});`;
+router.post('/user', (request: Request, response: Response) => {
+    let nombre = request.body.nombre;
+    let apellido = request.body.apellido;
+    let telefono = request.body.telefono;
+    let id_prefijo = request.body.idPrefijo;
+    let descripcion = request.body.descripcion;
+    let url_imagen = request.body.urlImagen;
+    let correo = request.body.correo;
+    let contrasena = request.body.contrasena;
+    let query = `insert into user(nombre, apellido, telefono, id_prefijo, descripcion, url_imagen, correo, contrasena)
+        values ('${nombre}', '${apellido}', ${telefono}, ${id_prefijo}, '${descripcion}', '${url_imagen}', '${correo}', '${contrasena}');`;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err)
             response.json({
                 status: 200,
-                empId,
-                name,
-                salary
+                message: 'User created successfully!'
             });    
         else 
             console.log(err);    
     });
-});*/
+});
+
+// Get all prefijos
+router.get('/prefijo', (request: Request, response: Response) =>{
+    let query = 'select * from prefijo';
+    mysqlConnection.query(query, (err, rows, fields) => {
+        if(!err)
+            response.json(rows)
+        else 
+            console.log(err);
+    });
+});
 
 export default router;
