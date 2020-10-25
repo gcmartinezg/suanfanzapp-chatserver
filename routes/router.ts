@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { mysqlConnection } from '../classes/dbconnection';
+import { mysqlConnection, disconnect } from '../classes/dbconnection';
+import { User } from '../classes/User';
 
 const router = Router();
 
@@ -82,6 +83,36 @@ router.delete('/employees/:id', (request: Request, response: Response) => {
     });
 });*/
 
+// Login Rest
+router.post('/user/login', (req: Request, res: Response) => {
+    let correo = req.body.correo;
+    let contrasena = req.body.contrasena;
+    if(correo.trim() == null || correo.trim() == ''){
+        res.json({
+            message: 'Ingrese un correo'
+        });
+    }
+    else if(contrasena.trim() == null || contrasena.trim() == ''){
+        res.json({
+            message: 'Ingrese su clave'
+        });
+    }
+    let query = `select * from user where correo = '${correo}';`;
+    let msgCredenIncorrectas = {message: 'Credenciales incorrectas'};
+    mysqlConnection.query(query, (err, rows, fields) => {
+
+        if(rows.length > 0){
+            res.json({
+                message: 'Sesion iniciada exitosamente'
+            });
+        }else
+            res.json({
+                msgCredenIncorrectas
+            });
+    });
+    //disconnect();
+});
+
 router.post('/user', (request: Request, response: Response) => {
     let nombre = request.body.nombre;
     let apellido = request.body.apellido;
@@ -113,6 +144,8 @@ router.get('/prefijo', (request: Request, response: Response) =>{
         else 
             console.log(err);
     });
+    disconnect();
 });
 
+    
 export default router;
