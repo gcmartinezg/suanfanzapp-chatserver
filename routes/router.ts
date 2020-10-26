@@ -134,7 +134,7 @@ router.post('/user/login-phone', (req: Request, res: Response) => {
         });
     }
 
-    let query = 'SELECT distinct u.id_prefijo, u.telefono, u.contrasena FROM user u' + 
+    let query = 'SELECT distinct u.id_prefijo, u.telefono, u.contrasena FROM user u ' + 
     'where u.id_prefijo = ? and u.telefono = ? and u.contrasena = ?;';
 
     mysqlConnection.query(query, [prefix, phone, contrasena], (err, rows, fields) => {
