@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { mysqlConnection, disconnect } from '../classes/dbconnection';
+import { mysqlConnection, desconectarDB } from '../classes/dbconnection';
 import { User } from '../classes/User';
 
 const router = Router();
@@ -125,12 +125,13 @@ router.post('/user', (request: Request, response: Response) => {
     let query = `insert into user(nombre, apellido, telefono, id_prefijo, descripcion, url_imagen, correo, contrasena)
         values ('${nombre}', '${apellido}', ${telefono}, ${id_prefijo}, '${descripcion}', '${url_imagen}', '${correo}', '${contrasena}');`;
     mysqlConnection.query(query, (err, rows, fields) => {
-        if(!err)
+        if(!err){
             response.json({
                 status: 200,
                 message: 'User created successfully!'
-            });    
-        else 
+            });
+            desconectarDB();    
+        }else 
             console.log(err);    
     });
 });
@@ -144,7 +145,7 @@ router.get('/prefijo', (request: Request, response: Response) =>{
         else 
             console.log(err);
     });
-    disconnect();
+    //disconnect();
 });
 
     
