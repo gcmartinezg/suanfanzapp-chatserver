@@ -83,8 +83,8 @@ router.delete('/employees/:id', (request: Request, response: Response) => {
     });
 });*/
 
-// Login Rest
-router.post('/user/login', (req: Request, res: Response) => {
+// Login mail Rest
+router.post('/user/login-mail', (req: Request, res: Response) => {
     let correo = req.body.correo;
     let contrasena = req.body.contrasena;
     if(correo.trim() == null || correo.trim() == ''){
@@ -97,9 +97,47 @@ router.post('/user/login', (req: Request, res: Response) => {
             message: 'Ingrese su clave'
         });
     }
-    let query = `select * from user where correo = '${correo}' and contrasena = '${contrasena}';`;
+    let query = 'select * from user where correo = ? and contrasena = ?;';
 
-    mysqlConnection.query(query, (err, rows, fields) => {
+    mysqlConnection.query(query, [correo, contrasena], (err, rows, fields) => {
+        //console.log(rows.length);
+        if(rows.length > 0){
+            res.json({
+                message: 'Sesion iniciada exitosamente'
+            });
+        }else
+            res.json({
+                message: 'Credenciales incorrectas'
+            });
+    });
+    //desconectarDB(); 
+});
+
+// Login phone Rest
+router.post('/user/login-phone', (req: Request, res: Response) => {
+    let prefix = req.body.idPrefijo;
+    let phone = req.body.telefono;
+    let contrasena = req.body.contrasena;
+    if(phone.trim() == null || phone.trim() == ''){
+        res.json({
+            message: 'Ingrese un teléfono válido'
+        });
+    }
+    else if(contrasena.trim() == null || contrasena.trim() == ''){
+        res.json({
+            message: 'Ingrese su clave'
+        });
+    }
+    else if(prefix.trim() == null || prefix.trim() == ''){
+        res.json({
+            message: 'Ingrese su prefijo'
+        });
+    }
+
+    let query = 'SELECT distinct u.id_prefijo, u.telefono, u.contrasena FROM user u' + 
+    'where u.id_prefijo = ? and u.telefono = ? and u.contrasena = ?;';
+
+    mysqlConnection.query(query, [prefix, phone, contrasena], (err, rows, fields) => {
         //console.log(rows.length);
         if(rows.length > 0){
             res.json({
@@ -122,9 +160,8 @@ router.post('/user', (request: Request, response: Response) => {
     let url_imagen = request.body.urlImagen;
     let correo = request.body.correo;
     let contrasena = request.body.contrasena;
-    let query = `insert into user(nombre, apellido, telefono, id_prefijo, descripcion, url_imagen, correo, contrasena)
-        values ('${nombre}', '${apellido}', ${telefono}, ${id_prefijo}, '${descripcion}', '${url_imagen}', '${correo}', '${contrasena}');`;
-    mysqlConnection.query(query, (err, rows, fields) => {
+    let query = 'insert into user(nombre, apellido, telefono, id_prefijo, descripcion, url_imagen, correo, contrasena) values (?, ?, ?, ?, ?, ?, ?, ?);';
+    mysqlConnection.query(query, [nombre, apellido, telefono, id_prefijo, descripcion, url_imagen, correo, contrasena], (err, rows, fields) => {
         if(!err){
             response.json({
                 status: 200,
@@ -149,5 +186,46 @@ router.get('/prefijo', (request: Request, response: Response) =>{
     //desconectarDB(); 
 });
 
+// find phone number
+router.get('/verify-phone', (request: Request, response: Response) =>{
+    let prefix = request.body.idPrefijo;
+    let phone = request.body.telefono;
+
+    let query = 'SELECT distinct u.id_prefijo, u.telefono FROM user u' + 
+    'where u.id_prefijo = ? and u.telefono = ?;';
+
+    mysqlConnection.query(query, [prefix, phone], (err, rows, fields) => {
+        //console.log(rows.length);
+        if(rows.length > 0){
+            response.json({
+                message: true
+            });
+        }else
+        response.json({
+                message: false
+            });
+    });
+    //desconectarDB(); 
+});
+
+// find mail
+router.get('/verify-mail', (request: Request, response: Response) =>{
+    let correo = request.body.correo;
+
+    let query = 'SELECT distinct u.correo FROM user u where u.correo = ?;';
+
+    mysqlConnection.query(query, [correo], (err, rows, fields) => {
+        //console.log(rows.length);
+        if(rows.length > 0){
+            response.json({
+                message: true
+            });
+        }else
+        response.json({
+                message: false
+            });
+    });
+    //desconectarDB(); 
+});
     
 export default router;
