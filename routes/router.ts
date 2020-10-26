@@ -110,7 +110,7 @@ router.post('/user/login', (req: Request, res: Response) => {
                 message: 'Credenciales incorrectas'
             });
     });
-    //disconnect();
+    desconectarDB(); 
 });
 
 router.post('/user', (request: Request, response: Response) => {
@@ -130,10 +130,11 @@ router.post('/user', (request: Request, response: Response) => {
                 status: 200,
                 message: 'User created successfully!'
             });
-            desconectarDB();    
+               
         }else 
             console.log(err);    
     });
+    desconectarDB(); 
 });
 
 // Get all prefijos
@@ -145,7 +146,7 @@ router.get('/prefijo', (request: Request, response: Response) =>{
         else 
             console.log(err);
     });
-    //disconnect();
+    desconectarDB(); 
 });
 
     
