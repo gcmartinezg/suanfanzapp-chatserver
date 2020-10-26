@@ -110,7 +110,7 @@ router.post('/user/login', (req: Request, res: Response) => {
                 message: 'Credenciales incorrectas'
             });
     });
-    desconectarDB(); 
+    //desconectarDB(); 
 });
 
 router.post('/user', (request: Request, response: Response) => {
@@ -134,7 +134,7 @@ router.post('/user', (request: Request, response: Response) => {
         }else 
             console.log(err);    
     });
-    desconectarDB(); 
+    //desconectarDB(); 
 });
 
 // Get all prefijos
@@ -146,7 +146,7 @@ router.get('/prefijo', (request: Request, response: Response) =>{
         else 
             console.log(err);
     });
-    desconectarDB(); 
+    //desconectarDB(); 
 });
 
     
