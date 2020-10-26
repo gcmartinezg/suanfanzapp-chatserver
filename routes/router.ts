@@ -97,17 +97,17 @@ router.post('/user/login', (req: Request, res: Response) => {
             message: 'Ingrese su clave'
         });
     }
-    let query = `select * from user where correo = '${correo}';`;
-    let msgCredenIncorrectas = {message: 'Credenciales incorrectas'};
-    mysqlConnection.query(query, (err, rows, fields) => {
+    let query = `select * from user where correo = '${correo}' and contrasena = '${contrasena}';`;
 
+    mysqlConnection.query(query, (err, rows, fields) => {
+        //console.log(rows.length);
         if(rows.length > 0){
             res.json({
                 message: 'Sesion iniciada exitosamente'
             });
         }else
             res.json({
-                msgCredenIncorrectas
+                message: 'Credenciales incorrectas'
             });
     });
     //disconnect();
