@@ -134,7 +134,7 @@ router.post('/user', (request: Request, response: Response) => {
         }else 
             console.log(err);    
     });
-    desconectarDB(); 
+    //desconectarDB(); 
 });
 
 // Get all prefijos
