@@ -187,29 +187,26 @@ router.get('/prefijo', (request: Request, response: Response) =>{
 });
 
 // find phone number
-router.get('/verify-phone', (request: Request, response: Response) =>{
+router.post('/verify-phone', (request: Request, response: Response) =>{
     let prefix = request.body.idPrefijo;
     let phone = request.body.telefono;
 
-    let query = 'SELECT distinct u.id_prefijo, u.telefono FROM user u' + 
+    let query = 'SELECT distinct u.id_prefijo, u.telefono FROM user u ' + 
     'where u.id_prefijo = ? and u.telefono = ?;';
 
     mysqlConnection.query(query, [prefix, phone], (err, rows, fields) => {
         //console.log(rows.length);
         if(rows.length > 0){
-            response.json({
-                message: true
-            });
-        }else
-        response.json({
-                message: false
-            });
+            response.json(true);
+        } else {
+            response.json(false);
+        }
     });
     //desconectarDB(); 
 });
 
 // find mail
-router.get('/verify-mail', (request: Request, response: Response) =>{
+router.post('/verify-mail', (request: Request, response: Response) =>{
     let correo = request.body.correo;
 
     let query = 'SELECT distinct u.correo FROM user u where u.correo = ?;';
@@ -217,13 +214,10 @@ router.get('/verify-mail', (request: Request, response: Response) =>{
     mysqlConnection.query(query, [correo], (err, rows, fields) => {
         //console.log(rows.length);
         if(rows.length > 0){
-            response.json({
-                message: true
-            });
-        }else
-        response.json({
-                message: false
-            });
+            response.json(true);
+        } else {
+            response.json(false);
+        }
     });
     //desconectarDB(); 
 });
