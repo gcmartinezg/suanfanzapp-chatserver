@@ -188,14 +188,14 @@ router.get('/prefijo', (request: Request, response: Response) =>{
 
 // find phone number
 router.post('/verify-phone', (request: Request, response: Response) =>{
-    let prefix = request.body.idPrefijo;
+    console.log(request.body);
+    let prefix = request.body.id_prefijo;
     let phone = request.body.telefono;
-
+    
     let query = 'SELECT distinct u.id_prefijo, u.telefono FROM user u ' + 
     'where u.id_prefijo = ? and u.telefono = ?;';
-
+    
     mysqlConnection.query(query, [prefix, phone], (err, rows, fields) => {
-        //console.log(rows.length);
         if(rows.length > 0){
             response.json(true);
         } else {
@@ -207,12 +207,12 @@ router.post('/verify-phone', (request: Request, response: Response) =>{
 
 // find mail
 router.post('/verify-mail', (request: Request, response: Response) =>{
-    let correo = request.body.correo;
+    let correo = request.body.mail;
 
     let query = 'SELECT distinct u.correo FROM user u where u.correo = ?;';
 
     mysqlConnection.query(query, [correo], (err, rows, fields) => {
-        //console.log(rows.length);
+        console.log(correo);
         if(rows.length > 0){
             response.json(true);
         } else {
