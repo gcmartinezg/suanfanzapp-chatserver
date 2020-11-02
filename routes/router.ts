@@ -118,10 +118,10 @@ router.post('/user/login-mail', (req: Request, res: Response) => {
 
 // Login phone Rest
 router.post('/user/login-phone', (req: Request, res: Response) => {
-    let prefix = req.body.idPrefijo;
+    let prefix = req.body.id_prefijo;
     let phone = req.body.telefono;
     let contrasena = req.body.contrasena;
-    if(phone.trim() == null || phone.trim() == ''){
+    if(phone < 1){
         res.json({
             message: 'Ingrese un teléfono válido'
         });
@@ -131,7 +131,7 @@ router.post('/user/login-phone', (req: Request, res: Response) => {
             message: 'Ingrese su clave'
         });
     }
-    else if(prefix.trim() == null || prefix.trim() == ''){
+    else if(prefix < 1){
         res.json({
             message: 'Ingrese su prefijo'
         });
