@@ -97,16 +97,19 @@ router.post('/user/login-mail', (req: Request, res: Response) => {
             message: 'Ingrese su clave'
         });
     }
-    let query = 'select * from user where correo = ? and contrasena = ?;';
+    let query = 'select * from user where correo = ? and contrasena = ? limit 1;';
 
     mysqlConnection.query(query, [correo, contrasena], (err, rows, fields) => {
         //console.log(rows.length);
         if(rows.length > 0){
+            //console.log(rows);
             res.json({
+                user: rows[0],
                 message: 'Sesion iniciada exitosamente'
             });
         }else
             res.json({
+                user: null,
                 message: 'Credenciales incorrectas'
             });
     });
@@ -134,17 +137,19 @@ router.post('/user/login-phone', (req: Request, res: Response) => {
         });
     }
 
-    let query = 'SELECT distinct u.id_prefijo, u.telefono, u.contrasena FROM user u ' + 
-    'where u.id_prefijo = ? and u.telefono = ? and u.contrasena = ?;';
+    let query = 'SELECT * FROM user u ' + 
+    'where u.id_prefijo = ? and u.telefono = ? and u.contrasena = ? limit 1;';
 
     mysqlConnection.query(query, [prefix, phone, contrasena], (err, rows, fields) => {
         //console.log(rows.length);
         if(rows.length > 0){
             res.json({
+                user: rows[0],
                 message: 'Sesion iniciada exitosamente'
             });
         }else
             res.json({
+                user: null,
                 message: 'Credenciales incorrectas'
             });
     });
